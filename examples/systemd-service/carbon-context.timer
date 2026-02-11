@@ -1,0 +1,11 @@
+[Unit]
+Description=Update carbon context every 30 minutes
+Requires=carbon-context.service
+
+[Timer]
+OnCalendar=*:0/30
+Persistent=true
+RandomizedDelaySec=300
+
+[Install]
+WantedBy=timers.target
