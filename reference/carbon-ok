@@ -1,0 +1,26 @@
+#!/bin/bash
+# carbon-ok: Exit 0 if carbon intensity is below threshold
+# Usage: carbon-ok && ./heavy_computation.sh
+
+THRESHOLD="${CARBON_THRESHOLD:-250}"  # Configurable default
+INTENSITY_FILE="/run/carbon/intensity"
+
+# Graceful degradation: if no data, assume it's OK
+if [ ! -f "$INTENSITY_FILE" ]; then
+    exit 0
+fi
+
+INTENSITY=$(cat "$INTENSITY_FILE")
+# Unknown intensity (-1) means proceed
+if [ "$INTENSITY" -eq -1 ]; then
+    exit 0
+fi
+
+# Check if intensity is within valid range (0-2000)
+if [ "$INTENSITY" -lt 0 ] || [ "$INTENSITY" -gt 2000 ]; then
+    echo "Warning: Invalid intensity value: $INTENSITY" >&2
+    exit 0  # Treat invalid as unknown, proceed
+fi
+
+# Check threshold
+[ "$INTENSITY" -le "$THRESHOLD" ]
