@@ -1,7 +1,7 @@
 RFC: 0001
 Title: Carbon Context Protocol
 Version: 0.1
-Status: Experimental
+Status: Draft
 Authors: [Your Name/Org]
 Created: 2024-01-01
 
@@ -32,4 +32,3 @@ CCP provides:
 ### 3. Filesystem Interface Specification
 
 #### 3.1 Location
-
