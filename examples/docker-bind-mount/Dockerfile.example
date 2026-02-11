@@ -1,0 +1,25 @@
+# Example Dockerfile using CCP bind mount
+FROM alpine:latest
+
+# Install basic tools
+RUN apk add --no-cache bash curl
+
+# Create directory for carbon context
+RUN mkdir -p /run/carbon
+
+# Copy your application
+COPY app.sh /app.sh
+RUN chmod +x /app.sh
+
+# Example carbon-aware command
+CMD ["/bin/bash", "-c", \
+    "if [ -f /run/carbon/intensity ] && [ $(cat /run/carbon/intensity) -lt 300 ]; then \
+        echo 'Low carbon, running full mode'; \
+        /app.sh --mode=full; \
+    else \
+        echo 'High carbon or unknown, running light mode'; \
+        /app.sh --mode=light; \
+    fi"]
+
+# Important: Run with bind mount:
+# docker run -v /run/carbon:/run/carbon:ro your-image
